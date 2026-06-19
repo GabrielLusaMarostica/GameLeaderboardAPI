@@ -2,6 +2,7 @@ package com.socrates.game_leaderboard_api.controller;
 
 import com.socrates.game_leaderboard_api.model.Jogador;
 import com.socrates.game_leaderboard_api.service.JogadorService;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -18,7 +19,7 @@ public class JogadorController {
     private JogadorService jogadorService;
 
     @PostMapping
-    public Jogador criar(@RequestBody Jogador jogador){
+    public Jogador criar(@Valid @RequestBody Jogador jogador){
         return jogadorService.criarJogador(jogador);
     }
 
@@ -40,7 +41,7 @@ public class JogadorController {
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<Jogador> atualizarJogador(@PathVariable Long id, @RequestBody Jogador jogadorAtualizado){
+    public ResponseEntity<Jogador> atualizarJogador(@PathVariable Long id, @Valid @RequestBody Jogador jogadorAtualizado){
         return jogadorService.atualizar(id, jogadorAtualizado)
                 .map(ResponseEntity::ok)
                 .orElse(ResponseEntity.notFound().build());
