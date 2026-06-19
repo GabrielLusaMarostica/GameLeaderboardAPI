@@ -6,6 +6,7 @@ import com.socrates.game_leaderboard_api.repository.JogadorRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
+import javax.swing.text.html.Option;
 import java.util.List;
 import java.util.Optional;
 
@@ -57,5 +58,16 @@ public class JogadorService {
                     jogador.setPontuacao(jogador.getPontuacao() + pontos);
                     return jogadorRepository.save(jogador);
                 });
+    }
+
+    public Optional<Integer> buscarPosicaoNoRanking(Long id){
+        List<Jogador> ranking = jogadorRepository.findAllByOrderByPontuacaoDesc();
+
+        for (int i = 0; i < ranking.size(); i++){
+            if(ranking.get(i).getId().equals(id)){
+                return Optional.of(i + 1);
+            }
+        }
+        return Optional.empty();
     }
 }

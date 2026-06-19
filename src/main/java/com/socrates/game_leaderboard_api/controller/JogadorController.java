@@ -63,4 +63,11 @@ public class JogadorController {
                 .orElse(ResponseEntity.notFound().build());
     }
 
+    @GetMapping("/{id}/posicao")
+    public ResponseEntity<Integer> buscarPosicaoNoRanking(@PathVariable Long id){
+        return jogadorService.buscarPosicaoNoRanking(id)
+                .map(ResponseEntity::ok)
+                .orElse(ResponseEntity.notFound().build());
+    }
+
 }
