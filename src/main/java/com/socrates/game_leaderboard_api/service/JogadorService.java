@@ -1,5 +1,6 @@
 package com.socrates.game_leaderboard_api.service;
 
+import com.socrates.game_leaderboard_api.exceptions.NicknameDuplicadoException;
 import com.socrates.game_leaderboard_api.model.Jogador;
 import com.socrates.game_leaderboard_api.repository.JogadorRepository;
 import lombok.RequiredArgsConstructor;
@@ -14,6 +15,9 @@ public class JogadorService {
     private final JogadorRepository jogadorRepository;
 
     public Jogador criarJogador(Jogador jogador){
+        if(jogadorRepository.existsByNickname(jogador.getNickname())){
+            throw new NicknameDuplicadoException(jogador.getNickname());
+        }
         return jogadorRepository.save(jogador);
     }
 
