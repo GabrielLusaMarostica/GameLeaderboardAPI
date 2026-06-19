@@ -46,4 +46,16 @@ public class JogadorService {
         jogadorRepository.deleteById(id);
         return true;
     }
+
+    public List<Jogador> listarRanking(){
+        return jogadorRepository.findAllByOrderByPontuacaoDesc();
+    }
+
+    public Optional<Jogador> incrementarPontuacao(Long id, Integer pontos){
+        return jogadorRepository.findById(id)
+                .map(jogador -> {
+                    jogador.setPontuacao(jogador.getPontuacao() + pontos);
+                    return jogadorRepository.save(jogador);
+                });
+    }
 }

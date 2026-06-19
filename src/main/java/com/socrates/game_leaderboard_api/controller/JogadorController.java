@@ -8,6 +8,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.Map;
 
 @RestController
 @RequestMapping("/jogadores")
@@ -24,6 +25,11 @@ public class JogadorController {
     @GetMapping
     public List<Jogador> listarTodosJogadores(){
         return jogadorService.listarJogadores();
+    }
+
+    @GetMapping("/ranking")
+    public List<Jogador> listarRanking(){
+        return jogadorService.listarRanking();
     }
 
     @GetMapping("/{id}")
@@ -47,4 +53,14 @@ public class JogadorController {
         }
         return ResponseEntity.noContent().build();
     }
+
+    @PatchMapping("/{id}/pontuacao")
+    //usando map string integer aqui, o java le o json que o jogador mandar, com o body.get depois ele le "pontos": 21
+    public ResponseEntity<Jogador> incrementarPontuacao(@PathVariable Long id, @RequestBody Map<String, Integer> body){
+        Integer pontos = body.get("pontos");
+        return jogadorService.incrementarPontuacao(id, pontos)
+                .map(ResponseEntity::ok)
+                .orElse(ResponseEntity.notFound().build());
+    }
+
 }
