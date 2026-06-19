@@ -31,4 +31,26 @@ public class JogadorController {
                 .map(ResponseEntity::ok)
                 .orElse(ResponseEntity.notFound().build());
     }
+
+    @PutMapping("/{id}")
+    public ResponseEntity<Jogador> atualizarJogador(@PathVariable Long id, @RequestBody Jogador jogadorAtualizado){
+        return jogadorRepository.findById(id)
+                //.map() é usada na API de Streams para transformar dados. Ela recebe uma coleção de objetos, aplica uma função a cada um deles e retorna uma nova coleção contendo apenas os elementos transformados.
+                .map(jogador -> {
+                    jogador.setNickname(jogadorAtualizado.getNickname());
+                    jogador.setPontuacao(jogadorAtualizado.getPontuacao());
+                    Jogador salvo = jogadorRepository.save(jogador);
+                    return ResponseEntity.ok(salvo);
+                })
+                .orElse(ResponseEntity.notFound().build());
+    }
+
+    @DeleteMapping("/{id}")
+    public ResponseEntity<Void> deletarJogador(@PathVariable Long id){
+        if(!jogadorRepository.existsById(id)){
+            return ResponseEntity.notFound().build();
+        }
+        jogadorRepository.deleteById(id);
+        return ResponseEntity.noContent().build();
+    }
 }
